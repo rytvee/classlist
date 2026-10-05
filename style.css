@@ -1,0 +1,1490 @@
+/* =========================================
+   TOKENS
+========================================= */
+
+:root {
+  --app-header-height: 60px;
+
+  --paper: #faf7f0;
+  --paper-raised: #ffffff;
+  --paper-head: #f0ead9;
+
+  --rule: #d8d0ba;
+  --rule-strong: #b7ad90;
+
+  --ink: #23293a;
+  --ink-muted: #6b7280;
+
+  --accent: #2f6f63;
+  --accent-hover: #24564c;
+
+  --danger: #b3402f;
+  --danger-hover: #92321f;
+
+  --focus: #2f6f63;
+
+  --font-display: "Source Serif 4", Georgia, serif;
+  --font-body:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --radius: 3px;
+
+  --sidebar-width: 240px;
+  --sidebar-gap: 24px;
+
+  --content-pad-x: 36px;
+
+  --scrollbar-size: 6px;
+
+  --z-table: 1;
+  --z-scrollbar: 20;
+  --z-date-nav: 900;
+  --z-header: 1000;
+}
+
+/* =========================================
+   GLOBAL
+========================================= */
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) var(--paper-raised);
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 40px 20px 80px;
+
+  background: var(--paper);
+  color: var(--ink);
+
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+
+  -webkit-font-smoothing: antialiased;
+
+  overflow: hidden;
+}
+
+body::before {
+  content: "";
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 40px;
+
+  background: var(--paper);
+
+  z-index: 80;
+
+  pointer-events: none;
+}
+
+main {
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+
+  color: var(--ink);
+
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+#appLoading[hidden] {
+  display: none !important;
+}
+
+#appLoading {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--ink-muted);
+
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+#loginSection {
+  max-width: 360px;
+
+  margin: 10vh auto 0;
+  padding: 40px 36px;
+
+  background: var(--paper-raised);
+
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+
+  box-shadow: 0 1px 2px rgba(35, 41, 58, 0.06);
+}
+
+#loginSection h1 {
+  margin-bottom: 28px;
+
+  font-size: 26px;
+}
+
+#loginForm div {
+  margin-bottom: 20px;
+}
+
+#loginForm label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--ink-muted);
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+#loginForm input {
+  width: 100%;
+
+  padding: 10px 12px;
+
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+
+  background: var(--paper);
+  color: var(--ink);
+
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+#loginForm input:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+
+  border-color: var(--focus);
+}
+
+#loginForm button[type="submit"] {
+  width: 100%;
+
+  margin-top: 4px;
+  padding: 11px 16px;
+
+  border: none;
+  border-radius: var(--radius);
+
+  background: var(--accent);
+  color: var(--paper-raised);
+
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+#loginForm button[type="submit"]:hover {
+  background: var(--accent-hover);
+}
+
+#loginError {
+  min-height: 1.2em;
+
+  margin: 14px 0 0;
+
+  color: var(--danger);
+
+  font-size: 13px;
+}
+
+#loginError:empty {
+  margin: 0;
+}
+
+/* =========================================
+   ATTENDANCE SECTION
+========================================= */
+
+#attendanceSection {
+  padding: 0;
+
+  background: var(--paper);
+
+  border: none;
+  border-radius: 0;
+}
+
+/* =========================================
+   ATTENDANCE LAYOUT
+========================================= */
+
+.attendance-layout {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    var(--sidebar-width);
+
+  column-gap: var(--sidebar-gap);
+
+  align-items: start;
+}
+
+/* =========================================
+   ATTENDANCE MAIN
+========================================= */
+
+.attendance-main {
+  position: fixed;
+
+  top: 40px;
+  bottom: 40px;
+
+  left: max(20px, calc((100vw - 1180px) / 2));
+
+  right: max(
+    calc(20px + var(--sidebar-width) + var(--sidebar-gap)),
+    calc((100vw - 1180px) / 2 + var(--sidebar-width) + var(--sidebar-gap))
+  );
+
+  min-width: 0;
+  min-height: 0;
+
+  background: var(--paper-raised);
+
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+
+  overflow: hidden;
+
+  z-index: 100;
+}
+
+/* =========================================
+   ATTENDANCE CONTENT (scroll container)
+========================================= */
+
+.attendance-content {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  padding: 0 var(--content-pad-x) 40px;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  /*
+   * Desktop:
+   * The header scrolls normally.
+   * The date navigation sticks.
+   */
+  scroll-padding-top: 20px;
+
+  isolation: isolate;
+}
+
+/* =========================================
+   APP HEADER
+=========================================
+
+   DESKTOP:
+   Normal scrolling element.
+
+   MOBILE:
+   Sticky element.
+========================================= */
+
+.app-header {
+  position: relative;
+
+  height: var(--app-header-height);
+  min-height: var(--app-header-height);
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin: 0 calc(var(--content-pad-x) * -1);
+  padding: 0 var(--content-pad-x);
+
+  background: var(--paper-raised);
+
+  border-bottom: 1px solid var(--rule);
+
+  border-radius: var(--radius) var(--radius) 0 0;
+
+  z-index: 100;
+
+  isolation: isolate;
+}
+
+.app-header::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background: var(--paper-raised);
+
+  z-index: -1;
+
+  pointer-events: none;
+}
+
+.app-header h2 {
+  padding-bottom: 4px;
+
+  border-bottom: 3px solid var(--accent);
+
+  font-size: 24px;
+}
+
+.app-header .date-display {
+  padding-top: 0;
+}
+
+.hamburger-button {
+  display: none;
+}
+
+/* =========================================
+   CURRENT DATE
+========================================= */
+
+.date-display {
+  padding-top: 20px;
+
+  color: var(--ink-muted);
+
+  font-size: 13px;
+}
+
+.date-display strong {
+  margin-left: 4px;
+
+  color: var(--ink);
+
+  font-family: var(--font-display);
+
+  font-size: 16px;
+}
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.attendance-sidebar {
+  position: fixed;
+
+  top: 40px;
+  bottom: 40px;
+
+  right: max(20px, calc((100vw - 1180px) / 2));
+
+  z-index: 200;
+
+  width: var(--sidebar-width);
+  height: calc(100vh - 80px);
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px;
+
+  background: var(--paper-raised);
+
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+
+  overflow: hidden;
+}
+
+.sidebar-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  flex-shrink: 0;
+}
+
+.sidebar-header h3 {
+  font-size: 18px;
+}
+
+.close-sidebar-button {
+  display: none;
+}
+
+.attendance-sidebar > p {
+  flex-shrink: 0;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+
+  padding-top: 20px;
+
+  border-top: 1px solid var(--rule);
+
+  flex-shrink: 0;
+}
+
+.sidebar-footer button {
+  width: 100%;
+}
+
+/* =========================================
+   LOGOUT & RESET
+========================================= */
+
+#logoutButton,
+#resetSheetBtn {
+  padding: 8px 16px;
+
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+
+  background: transparent;
+  color: var(--ink-muted);
+
+  font-family: var(--font-body);
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+#logoutButton:hover,
+#resetSheetBtn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* =========================================
+   SAVED DATES (sidebar)
+========================================= */
+
+.attendance-sidebar .dates-wrapper {
+  /* Positioning parent for the overlay scrollbar track. */
+  position: relative;
+
+  display: block;
+
+  flex: 1;
+
+  min-height: 0;
+
+  margin-bottom: 10px;
+
+  overflow: hidden;
+}
+
+.attendance-sidebar .dates-list {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  align-content: start;
+
+  gap: 6px;
+
+  width: 100%;
+  max-height: 100%;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.attendance-sidebar .dates-list.empty {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+}
+
+.attendance-sidebar .dates-scroll-button {
+  display: none;
+}
+
+.attendance-sidebar .date-item {
+  width: 100%;
+  min-width: 0;
+
+  padding: 8px 4px;
+}
+
+.no-dates-message {
+  padding: 20px 10px;
+
+  color: var(--ink-muted);
+
+  font-size: 13px;
+  font-style: italic;
+
+  text-align: center;
+}
+
+/* =========================================
+   MONTH NAVIGATION
+========================================= */
+
+.month-navigation {
+  display: grid;
+
+  grid-template-columns:
+    35px
+    minmax(0, 1fr)
+    35px;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 16px;
+
+  flex-shrink: 0;
+}
+
+.month-title {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-width: 0;
+
+  text-align: center;
+}
+
+.month-title strong {
+  font-family: var(--font-display);
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.month-title span {
+  color: var(--ink-muted);
+
+  font-size: 12px;
+}
+
+.month-button,
+.dates-scroll-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--rule);
+
+  border-radius: var(--radius);
+
+  background: var(--paper-raised);
+  color: var(--ink);
+
+  cursor: pointer;
+}
+
+.month-button {
+  width: 35px;
+  height: 35px;
+
+  padding: 0;
+
+  font-size: 22px;
+}
+
+.month-button:hover,
+.dates-scroll-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* =========================================
+   GENERIC DATES LIST
+========================================= */
+
+.dates-wrapper {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+.dates-list {
+  display: flex;
+
+  flex: 1;
+
+  min-width: 0;
+
+  gap: 8px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-behavior: smooth;
+}
+
+.dates-list button,
+.dates-list a {
+  padding: 6px 12px;
+
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+
+  background: var(--paper-raised);
+  color: var(--ink);
+
+  font-family: var(--font-body);
+  font-size: 13px;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.date-item {
+  flex: 0 0 auto;
+
+  min-width: 64px;
+
+  padding: 10px 14px;
+
+  border: 1px solid var(--rule);
+
+  border-radius: var(--radius);
+
+  background: var(--paper-raised);
+  color: var(--ink);
+
+  text-align: center;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.date-item:hover {
+  background: var(--paper-head);
+
+  border-color: var(--accent);
+}
+
+.date-item.active {
+  background: var(--accent);
+
+  color: var(--paper-raised);
+
+  border-color: var(--accent);
+}
+
+.date-item .day-name {
+  display: block;
+
+  color: var(--ink-muted);
+
+  font-size: 11px;
+}
+
+.date-item.active .day-name {
+  color: var(--paper-raised);
+
+  opacity: 0.8;
+}
+
+.date-item .day-number {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* =========================================
+   DATE NAVIGATION
+=========================================
+
+   DESKTOP:
+   Sticky.
+
+   MOBILE:
+   Normal scrolling element.
+========================================= */
+
+.date-navigation {
+  position: sticky;
+
+  top: 0;
+
+  z-index: var(--z-date-nav);
+
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 8px;
+
+  margin: 18px 0 28px;
+
+  padding: 12px 14px;
+
+  background: var(--paper-head);
+
+  border: 1px solid var(--rule);
+
+  border-radius: var(--radius);
+
+  isolation: isolate;
+}
+
+.date-navigation::before {
+  content: "";
+
+  position: absolute;
+
+  z-index: -1;
+
+  inset: 0;
+
+  background: var(--paper-head);
+
+  border-radius: var(--radius);
+
+  pointer-events: none;
+}
+
+.date-navigation button,
+#attendanceSection .date-navigation input[type="date"] {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+
+  padding: 7px 10px;
+
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+
+  background: var(--paper-raised);
+  color: var(--ink);
+
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+
+  box-sizing: border-box;
+}
+
+.date-navigation button {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.date-navigation button:hover {
+  border-color: var(--accent);
+
+  color: var(--accent);
+}
+
+.date-navigation .arrow {
+  display: inline-block;
+
+  line-height: 1;
+}
+
+#todayBtn {
+  border-color: var(--accent);
+
+  color: var(--accent);
+
+  font-weight: 600;
+}
+
+#todayBtn:hover {
+  background: var(--accent);
+
+  color: var(--paper-raised);
+}
+
+#attendanceSection .date-navigation input[type="date"]:focus {
+  outline: 2px solid var(--focus);
+
+  outline-offset: 1px;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.table-wrapper {
+  position: relative;
+
+  z-index: var(--z-table);
+
+  max-width: 100%;
+
+  overflow-x: auto;
+
+  border: 1px solid var(--rule);
+
+  border-radius: var(--radius);
+
+  isolation: isolate;
+}
+
+table {
+  position: relative;
+
+  z-index: 1;
+
+  width: auto;
+
+  border-collapse: collapse;
+
+  background: var(--paper-raised);
+}
+
+th,
+td {
+  padding: 5px;
+
+  border: 1px solid var(--rule);
+
+  white-space: nowrap;
+}
+
+th {
+  background-color: var(--paper-head);
+
+  vertical-align: top;
+
+  color: var(--ink-muted);
+
+  font-family: var(--font-body);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+tbody tr:nth-child(even) td {
+  background: #fcfaf4;
+}
+
+tfoot td {
+  background: var(--paper-head);
+
+  font-weight: 600;
+}
+
+/* =========================================
+   ATTENDANCE TABLE INPUTS
+========================================= */
+
+#attendanceSection input {
+  width: 70px;
+  min-width: 70px;
+
+  padding: 8px;
+
+  border: none;
+  outline: none;
+
+  box-sizing: content-box;
+
+  background: transparent;
+  color: var(--ink);
+
+  font-family: var(--font-body);
+
+  font-size: 14px;
+}
+
+#attendanceSection th input {
+  background-color: transparent;
+
+  font-weight: 600;
+}
+
+#attendanceSection input:focus {
+  outline: 2px solid var(--focus);
+
+  outline-offset: -2px;
+}
+
+/* =========================================
+   ROW REMOVE CONTROL
+========================================= */
+
+.row-control {
+  width: 36px;
+  min-width: 36px;
+
+  padding: 4px;
+
+  border: 1px solid var(--rule);
+
+  background: var(--paper-raised);
+
+  text-align: center;
+}
+
+#attendanceTable tbody tr td.row-control {
+  border-left: none !important;
+}
+
+#attendanceTable th.row-control {
+  border-top: none !important;
+}
+
+/* =========================================
+   COLUMN REMOVE CONTROL
+========================================= */
+
+.column-remove-wrapper {
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================
+   CIRCULAR MINUS BUTTON
+========================================= */
+
+.circle-button {
+  width: 24px;
+  height: 24px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid var(--rule-strong);
+
+  border-radius: 50%;
+
+  background: var(--paper-raised);
+  color: var(--danger);
+
+  font-size: 16px;
+  line-height: 20px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.circle-button:hover {
+  background: var(--danger);
+
+  border-color: var(--danger);
+
+  color: var(--paper-raised);
+}
+
+/* =========================================
+   EMPTY CONTROL CELLS
+========================================= */
+
+.empty-control {
+  border: none !important;
+
+  background: transparent !important;
+}
+
+/* =========================================
+   ADD COLUMN
+========================================= */
+
+.add-column-cell {
+  padding: 4px;
+
+  border: none !important;
+
+  background: transparent !important;
+
+  text-align: center;
+
+  vertical-align: middle;
+}
+
+.add-column-button {
+  width: 24px;
+  height: 24px;
+
+  padding: 0;
+
+  border: 1px solid var(--rule-strong);
+
+  border-radius: 50%;
+
+  background: var(--paper-raised);
+  color: var(--accent);
+
+  font-size: 16px;
+  line-height: 20px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.add-column-button:hover {
+  background: var(--accent);
+
+  border-color: var(--accent);
+
+  color: var(--paper-raised);
+}
+
+/* =========================================
+   ADD ROW
+========================================= */
+
+.add-row-cell {
+  padding: 4px;
+
+  border: none !important;
+
+  background: transparent !important;
+
+  text-align: center;
+
+  vertical-align: middle;
+}
+
+.add-row-button {
+  width: 24px;
+  height: 24px;
+
+  padding: 0;
+
+  border: 1px solid var(--rule-strong);
+
+  border-radius: 50%;
+
+  background: var(--paper-raised);
+  color: var(--accent);
+
+  font-size: 16px;
+  line-height: 20px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.add-row-button:hover {
+  background: var(--accent);
+
+  border-color: var(--accent);
+
+  color: var(--paper-raised);
+}
+
+/* =========================================
+   RESPONSIVE — MOBILE
+========================================= */
+
+@media (max-width: 850px) {
+  :root {
+    --content-pad-x: 18px;
+  }
+
+  body {
+    padding: 20px 12px 60px;
+
+    overflow: hidden;
+  }
+
+  body::before {
+    height: 20px;
+  }
+
+  .attendance-layout {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ----- main frame ----- */
+
+  .attendance-main {
+    position: fixed;
+
+    top: 20px;
+    right: 12px;
+    bottom: 20px;
+    left: 12px;
+
+    width: auto;
+
+    min-width: 0;
+    min-height: 0;
+
+    margin: 0;
+
+    background: var(--paper-raised);
+
+    border: 1px solid var(--rule);
+
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    z-index: 100;
+  }
+
+  /* ----- scroll container ----- */
+
+  .attendance-content {
+    padding: 0 var(--content-pad-x) 24px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    /* Sticky mobile header: leave room when scrolling to anchors/focus. */
+    scroll-padding-top: var(--app-header-height);
+  }
+
+  /* ----- sticky header ----- */
+
+  .app-header {
+    position: sticky;
+
+    top: 0;
+
+    height: var(--app-header-height);
+    min-height: var(--app-header-height);
+
+    margin: 0 calc(var(--content-pad-x) * -1);
+
+    padding: 0 var(--content-pad-x);
+
+    background: var(--paper-raised);
+
+    border-bottom: 1px solid var(--rule);
+
+    border-radius: var(--radius) var(--radius) 0 0;
+
+    z-index: var(--z-header);
+
+    isolation: isolate;
+  }
+
+  .app-header::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background: var(--paper-raised);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
+  .app-header h2 {
+    font-size: 20px;
+  }
+
+  /* ----- date navigation (NOT sticky on mobile) ----- */
+
+  .date-navigation {
+    position: relative;
+
+    top: auto;
+
+    z-index: var(--z-table);
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+    margin: 18px 0 28px;
+
+    padding: 12px 14px;
+
+    background: var(--paper-head);
+
+    border: 1px solid var(--rule);
+
+    border-radius: var(--radius);
+
+    isolation: isolate;
+  }
+
+  .date-navigation::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background: var(--paper-head);
+
+    border-radius: var(--radius);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
+  .date-navigation button,
+  #attendanceSection .date-navigation input[type="date"] {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 36px;
+
+    padding: 7px 10px;
+
+    box-sizing: border-box;
+  }
+
+  .date-navigation .arrow {
+    display: inline-block;
+
+    line-height: 1;
+  }
+
+  /* ----- table ----- */
+
+  .table-wrapper {
+    position: relative;
+
+    z-index: var(--z-table);
+
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    isolation: isolate;
+  }
+
+  table {
+    position: relative;
+
+    z-index: 1;
+  }
+
+  /* ----- hamburger / close ----- */
+
+  .hamburger-button,
+  .close-sidebar-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    padding: 0;
+
+    border: 1px solid var(--rule);
+
+    border-radius: var(--radius);
+
+    background: var(--paper-raised);
+    color: var(--ink);
+
+    font-size: 20px;
+
+    cursor: pointer;
+  }
+
+  /* ----- slide-in sidebar ----- */
+
+  .attendance-sidebar {
+    position: fixed;
+
+    inset: 0 0 0 auto;
+
+    z-index: 200;
+
+    width: min(320px, 88vw);
+
+    height: 100dvh;
+    max-height: 100dvh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+
+    background: var(--paper-raised);
+
+    border: none;
+
+    border-left: 1px solid var(--rule);
+
+    border-radius: 0;
+
+    transform: translateX(100%);
+
+    transition: transform 0.25s ease;
+
+    overflow: hidden;
+  }
+
+  .attendance-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .attendance-sidebar .sidebar-header {
+    flex-shrink: 0;
+  }
+
+  .attendance-sidebar > p {
+    flex-shrink: 0;
+
+    margin-bottom: 16px;
+  }
+
+  .attendance-sidebar .month-navigation {
+    flex-shrink: 0;
+
+    margin-bottom: 16px;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 150;
+
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  /* ----- saved dates (inherits the desktop grid) ----- */
+
+  .attendance-sidebar .dates-wrapper {
+    display: block;
+
+    flex: 1;
+
+    min-height: 0;
+
+    width: 100%;
+
+    margin-bottom: 16px;
+
+    overflow: hidden;
+  }
+
+  .attendance-sidebar .sidebar-footer {
+    flex-shrink: 0;
+
+    width: 100%;
+
+    margin-top: 0;
+
+    padding-top: 16px;
+
+    border-top: 1px solid var(--rule);
+  }
+
+  .attendance-sidebar .sidebar-footer button {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   TOUCH ARROW ADJUSTMENT
+========================================= */
+
+@media (pointer: coarse) and (max-width: 850px) {
+  .date-navigation .arrow {
+    transform: translateY(-2px);
+  }
+}

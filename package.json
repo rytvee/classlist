@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "jose": "^6.2.12"
+  },
+  "name": "classlist",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {}
+}
