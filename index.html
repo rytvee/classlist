@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Class List</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+    <main>
+
+        <!-- APP LOADING -->
+        <div id="appLoading" hidden></div>
+
+
+        <!-- LOGIN -->
+        <section id="loginSection" hidden>
+
+            <h1>Login</h1>
+
+            <form id="loginForm" method="POST" action="/api/login">
+
+                <div>
+                    <label for="username">Username</label>
+
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div>
+                    <label for="password">Password</label>
+
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <button type="submit">
+                    Login
+                </button>
+
+                <p id="loginError"></p>
+
+            </form>
+
+        </section>
+
+
+        <!-- ATTENDANCE -->
+        <section id="attendanceSection" hidden>
+
+            <div class="attendance-layout">
+
+                <!-- MAIN WORKSPACE -->
+                <div class="attendance-main">
+
+                    <div class="attendance-content">
+
+                        <header class="app-header">
+                            <button id="openDatesSidebar" class="hamburger-button" type="button"
+                                aria-label="Open attendance dates" aria-controls="attendanceSidebar"
+                                aria-expanded="false">
+                                ☰
+                            </button>
+
+                            <h2>Class List</h2>
+                        </header>
+
+                        <div class="date-display">
+                            Current sheet:
+                            <strong id="currentDateDisplay"></strong>
+                        </div>
+
+                        <button type="button" id="resetSheetBtn">
+                            Reset Sheet
+                        </button>
+
+                        <div class="date-navigation">
+
+                            <button id="previousDate" type="button">
+                                <span class="arrow">&larr;</span> Previous
+                            </button>
+
+                            <input type="date" id="datePicker">
+
+                            <button id="nextDate" type="button">
+                                Next <span class="arrow">&rarr;</span>
+                            </button>
+
+                            <button id="todayBtn" type="button">
+                                Today
+                            </button>
+
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table id="attendanceTable">
+                                <thead id="tableHead"></thead>
+                                <tbody id="tableBody"></tbody>
+                                <tfoot id="tableFooter"></tfoot>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SIDEBAR -->
+                <aside id="attendanceSidebar" class="attendance-sidebar" aria-label="Attendance dates">
+
+                    <div class="sidebar-header">
+
+                        <h3>Attendance Dates</h3>
+
+                        <button id="closeDatesSidebar" class="close-sidebar-button" type="button"
+                            aria-label="Close attendance dates">
+                            ×
+                        </button>
+
+                    </div>
+
+                    <p>
+                        Open a date to view its attendance sheet.
+                    </p>
+
+                    <div class="date-search">
+                        <input type="search" id="dateSearchInput" placeholder="Search attendance..." autocomplete="off">
+                    </div>
+
+                    <!-- MONTH NAVIGATION -->
+                    <div class="month-navigation">
+
+                        <button id="previousMonth" type="button" class="month-button">
+                            ‹
+                        </button>
+
+                        <div class="month-title">
+
+                            <strong id="monthName"></strong>
+
+                            <span id="monthCount"></span>
+
+                        </div>
+
+                        <button id="nextMonth" type="button" class="month-button">
+                            ›
+                        </button>
+
+                    </div>
+
+
+                    <!-- SAVED DATES -->
+                    <div class="dates-wrapper">
+
+
+                        <div id="datesList" class="dates-list"></div>
+
+
+                    </div>
+
+
+                    <!-- SIDEBAR FOOTER -->
+                    <div class="sidebar-footer">
+
+                        <button id="logoutButton" type="button">
+                            Logout
+                        </button>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+
+            <!-- MOBILE SIDEBAR OVERLAY -->
+            <div id="sidebarOverlay" class="sidebar-overlay" hidden></div>
+
+        </section>
+
+    </main>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
