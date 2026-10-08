@@ -110,7 +110,7 @@ h3 {
 
 
 /* =========================================
-   LOGIN
+   LOGIN & DATE SEARCH
 ========================================= */
 
 #appLoading[hidden] {
@@ -166,6 +166,17 @@ h3 {
   letter-spacing: 0.02em;
 }
 
+.date-search {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 16px;
+}
+
+.date-search #dateSearchInput,
 #loginForm input {
   width: 100%;
 
@@ -181,6 +192,7 @@ h3 {
   font-size: 14px;
 }
 
+.date-search #dateSearchInput:focus,
 #loginForm input:focus {
   outline: 2px solid var(--focus);
   outline-offset: 1px;
@@ -188,6 +200,7 @@ h3 {
   border-color: var(--focus);
 }
 
+.date-search button[type="button"],
 #loginForm button[type="submit"] {
   width: 100%;
 
@@ -209,6 +222,12 @@ h3 {
   transition: background 0.15s ease;
 }
 
+.date-search button[type="button"] {
+  margin-top: 0;
+  width: auto;
+}
+
+.date-search button[type="button"]:hover,
 #loginForm button[type="submit"]:hover {
   background: var(--accent-hover);
 }

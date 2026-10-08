@@ -13,6 +13,8 @@ const currentDateDisplay = document.getElementById("currentDateDisplay");
 const datePicker = document.getElementById("datePicker");
 const datesList = document.getElementById("datesList");
 
+const dateSearchInput = document.getElementById("dateSearchInput");
+
 const previousDateBtn = document.getElementById("previousDate");
 const nextDateBtn = document.getElementById("nextDate");
 const todayBtn = document.getElementById("todayBtn");
@@ -47,6 +49,9 @@ let sheets = {};
 let savedDates = [];
 
 let saveTimeout = null;
+
+let searchResults = null;
+let searchTimeout = null;
 
 // ==========================================
 // MESSAGE DISPLAY
@@ -967,7 +972,61 @@ async function loadSavedDates() {
   }
 }
 
+// ==========================================
+// SEARCH SAVED SHEETS
+// ==========================================
+
+async function searchSavedSheets(query) {
+  query = query.trim();
+
+  // Empty search = return to normal saved dates
+  if (!query) {
+    searchResults = null;
+    renderDates();
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (response.status === 401) {
+      loginSection.hidden = false;
+      attendanceSection.hidden = true;
+      return;
+    }
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error(result.error || "Search failed");
+      return;
+    }
+
+    searchResults = result;
+
+    renderSearchDates();
+
+    if (result.latestDate) {
+      await loadDate(result.latestDate);
+    }
+  } catch (error) {
+    console.error("Search failed:", error);
+  }
+}
+
+// ==========================================
+// RENDER DATES
+// ==========================================
+
 function renderDates() {
+  if (searchResults) {
+    renderSearchDates();
+    return;
+  }
+
   const year = displayedMonth.getFullYear();
   const month = displayedMonth.getMonth();
 
@@ -987,8 +1046,6 @@ function renderDates() {
   document.getElementById("monthCount").textContent = `${monthDates.length} ${
     monthDates.length === 1 ? "day" : "days"
   }`;
-
-  const datesList = document.getElementById("datesList");
 
   datesList.innerHTML = "";
 
@@ -1051,6 +1108,88 @@ function changeDisplayedMonth(months) {
 }
 
 // ==========================================
+// RENDER SEARCH RESULTS
+// ==========================================
+
+function renderSearchDates() {
+  if (!searchResults) {
+    renderDates();
+    return;
+  }
+
+  const year = displayedMonth.getFullYear();
+  const month = displayedMonth.getMonth();
+
+  const monthPrefix = `${year}-${String(month + 1).padStart(2, "0")}`;
+
+  const monthName = displayedMonth.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  document.getElementById("monthName").textContent = monthName;
+
+  // Only get search results belonging to the currently displayed month.
+  const monthDates = (searchResults.dates || [])
+    .filter((date) => date.startsWith(monthPrefix))
+    .sort((a, b) => b.localeCompare(a));
+
+  document.getElementById("monthCount").textContent =
+    `${monthDates.length} ${monthDates.length === 1 ? "day" : "days"}`;
+
+  datesList.innerHTML = "";
+
+  datesList.classList.remove("empty");
+
+  // No matching dates in this month
+  if (monthDates.length === 0) {
+    datesList.classList.add("empty");
+
+    const message = document.createElement("div");
+
+    message.className = "no-dates-message";
+    message.textContent = "No matching attendance sheets found.";
+
+    datesList.appendChild(message);
+
+    return;
+  }
+
+  // Render matching dates for this month only.
+  monthDates.forEach((date) => {
+    const dateObject = new Date(`${date}T00:00:00`);
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "date-item";
+
+    if (date === currentDate) {
+      button.classList.add("active");
+    }
+
+    button.innerHTML = `
+      <span class="day-name">
+        ${dateObject.toLocaleDateString("en-US", {
+          weekday: "short",
+        })}
+      </span>
+
+      <span class="day-number">
+        ${dateObject.getDate()}
+      </span>
+    `;
+
+    button.addEventListener("click", () => {
+      loadDate(date);
+      closeSidebarOnMobile();
+    });
+
+    datesList.appendChild(button);
+  });
+}
+
+// ==========================================
 // EVENT LISTENERS
 // ==========================================
 
@@ -1093,6 +1232,27 @@ previousMonth.addEventListener("click", () => {
 nextMonth.addEventListener("click", () => {
   changeDisplayedMonth(1);
 });
+
+// ==========================================
+// SEARCH EVENTS
+// ==========================================
+
+dateSearchInput.addEventListener("input", () => {
+  clearTimeout(searchTimeout);
+
+  const query = dateSearchInput.value.trim();
+
+  if (!query) {
+    searchResults = null;
+    renderDates();
+    return;
+  }
+
+  searchTimeout = setTimeout(() => {
+    searchSavedSheets(query);
+  }, 300);
+});
+
 
 // ==========================================
 // SIDEBAR
